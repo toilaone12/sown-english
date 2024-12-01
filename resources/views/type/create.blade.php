@@ -4,7 +4,14 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title fw-semibold mb-4">Thêm thể loại câu hỏi</h5>
+                    <div class="d-flex align-items-start">
+                        <h5 class="card-title fw-semibold mb-4 mt-1">Thêm thể loại câu hỏi</h5>
+                        <div class="mx-3">
+                            <a href="{{route('type.list')}}" class="icon-hover">
+                                <i class="ti ti-clipboard-data fs-30 cursor-pointer text-success" title="Danh sách"></i>
+                            </a>
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-body">
                             <form action="{{route('type.insert')}}">

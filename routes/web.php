@@ -21,3 +21,6 @@ Route::get('/create', [AccountController::class, 'create'])->name('account.creat
 Route::get('/list', [TypeQuestionController::class, 'list'])->name('type.list');
 Route::get('/create', [TypeQuestionController::class, 'create'])->name('type.create');
 Route::get('/insert', [TypeQuestionController::class, 'insert'])->name('type.insert');
+Route::post('/delete', [TypeQuestionController::class, 'delete'])->name('type.delete');
+Route::get('/trash', [TypeQuestionController::class, 'trash'])->name('type.trash');
+Route::get('/restore', [TypeQuestionController::class, 'restore'])->name('type.restore');

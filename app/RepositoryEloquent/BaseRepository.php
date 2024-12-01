@@ -75,6 +75,13 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->onlyTrashed()->get($columns);
     }
 
+    public function restoreTrashed($id)
+    {
+        // dd($id);
+        $one =  $this->model->withTrashed()->find($id);
+        return $one->restore();
+    }
+
     /**
      * Save a new entity in repository
      * @param array $input

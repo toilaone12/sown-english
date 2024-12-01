@@ -18,6 +18,8 @@ interface RepositoryInterface
 
     public function allOnlyTrashed($columns = ['*']);
 
+    public function restoreTrashed($id);
+
     public function findOrFail($id);
 
     public function paginate($limit = null, $columns = ['*']);

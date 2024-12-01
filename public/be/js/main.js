@@ -1,3 +1,4 @@
+//datatable
 $('#listTable').DataTable({
     "responsive": true,
     "pageLength": 10,
@@ -19,4 +20,15 @@ $('#listTable').DataTable({
             "sLast":     "Cuối cùng"
         }
     }
+});
+
+//notyf
+const notyf = new Notyf({
+    duration: 5000,
+    ripple: true,
+    position: {
+        x: 'right',
+        y: 'top',
+    },
+    dismissible: true,
 });

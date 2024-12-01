@@ -16,7 +16,7 @@ class TypeQuestionService
         $this->typeQuestionRepository = $typeQuestionRepository;
     }
 
-    // Lấy danh sách link liên kết
+    // Lấy danh sách thể loại câu hỏi
     public function list()
     {
         try {
@@ -38,7 +38,7 @@ class TypeQuestionService
         }
     }
 
-    // Thêm một link liên kết mới
+    // Thêm một thể loại câu hỏi mới
     public function insert(Request $request)
     {
         try {
@@ -48,7 +48,7 @@ class TypeQuestionService
                 'number' => 'required|unique:type_question,number'
             ], [
                 'name.required' => 'Tên thể loại bắt buộc phải có',
-                'number.unique' => 'Chỉ nên chọn 1',
+                'number.unique' => 'Đã tồn tại thể loại câu hỏi',
                 'number.required' => 'Phải chọn số lượng',
             ]);
             $insert = $this->typeQuestionRepository->create([
@@ -79,7 +79,7 @@ class TypeQuestionService
         }
     }
 
-    // Lấy một link liên kết
+    // Lấy một thể loại câu hỏi
     public function getOne(Request $request)
     {
         try {
@@ -88,7 +88,7 @@ class TypeQuestionService
             // $one = TypeQuestion::find($id);
             return [
                 'status' => 'success',
-                'message' => 'Lấy link liên kết thành công',
+                'message' => 'Lấy thể loại câu hỏi thành công',
                 'data' => $one
             ];
         } catch (QueryException $e) {
@@ -104,7 +104,7 @@ class TypeQuestionService
         }
     }
 
-    // Cập nhật link liên kết
+    // Cập nhật thể loại câu hỏi
     public function update(Request $request)
     {
         try {
@@ -125,12 +125,12 @@ class TypeQuestionService
             if ($update) {
                 return [
                     'status' => 'success',
-                    'message' => 'Cập nhật link liên kết thành công'
+                    'message' => 'Cập nhật thể loại câu hỏi thành công'
                 ];
             } else {
                 return [
                     'status' => 'error',
-                    'message' => 'Không thể cập nhật link liên kết vào cơ sở dữ liệu'
+                    'message' => 'Không thể cập nhật thể loại câu hỏi vào cơ sở dữ liệu'
                 ];
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -161,12 +161,12 @@ class TypeQuestionService
             if ($delete) {
                 return [
                     'status' => 'success',
-                    'message' => 'Xóa thành link liên kết thành công'
+                    'message' => 'Đã cho thể loại câu hỏi đó vào thùng rác'
                 ];
             } else {
                 return [
                     'status' => 'error',
-                    'message' => 'Không thể xóa link liên kết vào cơ sở dữ liệu'
+                    'message' => 'Không thể xóa thể loại câu hỏi vào cơ sở dữ liệu'
                 ];
             }
         } catch (QueryException $e) {
@@ -183,7 +183,7 @@ class TypeQuestionService
         }
     }
 
-    // Xem link liên kết đã cho vào thùng rác
+    // Xem thể loại câu hỏi đã cho vào thùng rác
     public function trash()
     {
         try {
@@ -191,9 +191,33 @@ class TypeQuestionService
             $data = $this->typeQuestionRepository->allOnlyTrashed();
             return [
                 'status' => 'success',
-                'message' => 'Lấy link liên kết thành công',
+                'message' => 'Lấy thể loại câu hỏi thành công',
                 'data' => $data
             ];
+        } catch (QueryException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Lỗi truy vấn cơ sở dữ liệu: ' . $e->getMessage()
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Đã xảy ra lỗi: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    //Khôi phục
+    public function restore(Request $request)
+    {
+        try {
+            $id = $request->get('id');
+            $restore = $this->typeQuestionRepository->restoreTrashed($id);
+            if($restore) {
+                return [
+                    'status' => 'success',
+                    'message' => 'Khôi phục thành công',
+                ];
+            }
         } catch (QueryException $e) {
             return response()->json([
                 'status' => 'error',
