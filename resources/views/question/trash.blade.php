@@ -12,8 +12,8 @@
                             </a>
                         </div>
                         <div class="ml-3">
-                            <a href="{{route('type.trash')}}" class="icon-hover">
-                                <i class="ti ti-recycle fs-30 cursor-pointer text-warning" title="Xem thùng rác"></i>
+                            <a href="{{route('type.list')}}" class="icon-hover">
+                                <i class="ti ti-list-details fs-30 cursor-pointer text-success" title="Danh sách"></i>
                             </a>
                         </div>
                     </div>
@@ -35,12 +35,12 @@
                                         <td width="200">{{$one->name}}</td>
                                         <td width="300">Có: <span class="text-danger fw-bolder">{{$one->number}}</span> kết quả trả lời</td>
                                         <td width="100">
-                                            <a href="{{route('type.edit',['id' => $one->id])}}" class="border border-light rounded d-block mb-2">
-                                                <i class="ti ti-edit fs-30 cursor-pointer text-success" title="Sửa"></i>
+                                            <a href="{{route('type.restore',['id' => $one->id])}}" class="border border-light rounded d-block mb-2">
+                                                <i class="ti ti-refresh fs-30 cursor-pointer text-success" title="Khôi phục"></i>
                                             </a>
-                                            <div class="border border-light rounded d-block delete-type" data-id="{{$one->id}}" data-name="{{$one->name}}">
-                                                <i class="ti ti-trash fs-30 cursor-pointer text-danger" title="Bỏ vào thùng rác"></i>
-                                            </div>
+                                            <a href="" class="border border-light rounded d-block">
+                                                <i class="ti ti-backspace fs-30 cursor-pointer text-danger" title="Xóa hoàn toàn"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

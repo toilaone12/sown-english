@@ -2,25 +2,25 @@
 
 namespace App\Http\Services;
 
-use App\Repositories\TypeQuestionRepositoryInterface;
+use App\Repositories\QuestionRepositoryInterface;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
-class TypeQuestionService
+class QuestionService
 {
-    protected $typeQuestionRepository;
+    protected $questionRepository;
 
-    public function __construct(TypeQuestionRepositoryInterface $typeQuestionRepository)
+    public function __construct(QuestionRepositoryInterface $questionRepository)
     {
-        $this->typeQuestionRepository = $typeQuestionRepository;
+        $this->questionRepository = $questionRepository;
     }
 
-    // Lấy danh sách thể loại câu hỏi
+    // Lấy danh sách câu hỏi
     public function list()
     {
         try {
-            $lists = $this->typeQuestionRepository->all();
+            $lists = $this->questionRepository->all();
             return [
                 'status' => 'success',
                 'data' => $lists
@@ -38,22 +38,39 @@ class TypeQuestionService
         }
     }
 
-    // Thêm một thể loại câu hỏi mới
+    // Thêm một câu hỏi mới
     public function insert(Request $request)
     {
         try {
             $all = $request->all();
             $request->validate([
                 'name' => 'required',
-                'number' => 'required|unique:type_question,number'
+                'type_id' => 'required|numeric|not_in:0',
+                'answer' => 'required',
+                'correct' => 'required',
             ], [
-                'name.required' => 'Tên thể loại bắt buộc phải có',
-                'number.unique' => 'Đã tồn tại thể loại câu hỏi',
-                'number.required' => 'Phải chọn số lượng',
+                'name.required' => 'Tên câu hỏi bắt buộc phải có',
+                'type_id.required' => 'Số lượng câu hỏi bắt buộc phải có',
+                'type_id.numeric' => 'Số lượng câu hỏi bắt buộc phải có',
+                'type_id.not_in' => 'Số lượng câu hỏi bắt buộc phải có',
+                'answer.required' => 'Đáp án cho câu hỏi bắt buộc phải có',
+                'correct.required' => 'Kết quả đáp án cho câu hỏi bắt buộc phải có',
             ]);
-            $insert = $this->typeQuestionRepository->create([
+            // dd($all);
+            $answers = $all['answer'];
+            $number = $all['type_id'];
+            $arrAnswer = [''];
+            $letters = ['A','B','C','D'];
+            foreach ($answers as $index => $answer) {
+                if ($index < $number) $arrAnswer[$letters[$index]] = $answer;
+            }
+            $arrAnswer = array_filter($arrAnswer);
+            $jsonAnswer = json_encode($arrAnswer);
+            $insert = $this->questionRepository->create([
                 'name' => $all['name'],
-                'number' => $all['number'],
+                'type_id' => $all['type_id'],
+                'answer' => $jsonAnswer,
+                'correct' => $all['correct'],
             ]);
             if ($insert) {
                 return [
@@ -79,15 +96,15 @@ class TypeQuestionService
         }
     }
 
-    // Lấy một thể loại câu hỏi
+    // Lấy một câu hỏi
     public function getOne(Request $request)
     {
         try {
             $id = $request->get('id');
-            $one = $this->typeQuestionRepository->find($id);
+            $one = $this->questionRepository->find($id);
             return [
                 'status' => 'success',
-                'message' => 'Lấy thể loại câu hỏi thành công',
+                'message' => 'Lấy câu hỏi thành công',
                 'data' => $one
             ];
         } catch (QueryException $e) {
@@ -103,7 +120,7 @@ class TypeQuestionService
         }
     }
 
-    // Cập nhật thể loại câu hỏi
+    // Cập nhật câu hỏi
     public function update(Request $request)
     {
         try {
@@ -116,19 +133,19 @@ class TypeQuestionService
                 'name.required' => 'Tên thể loại bắt buộc phải có',
                 'number.required' => 'Phải chọn số lượng',
             ]);
-            $update = $this->typeQuestionRepository->update([
+            $update = $this->questionRepository->update([
                 'name' => $all['name'],
                 'number' => $all['number'],
             ],$id);
             if ($update) {
                 return [
                     'status' => 'success',
-                    'message' => 'Cập nhật thể loại câu hỏi thành công'
+                    'message' => 'Cập nhật câu hỏi thành công'
                 ];
             } else {
                 return [
                     'status' => 'error',
-                    'message' => 'Không thể cập nhật thể loại câu hỏi vào cơ sở dữ liệu'
+                    'message' => 'Không thể cập nhật câu hỏi vào cơ sở dữ liệu'
                 ];
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -155,16 +172,16 @@ class TypeQuestionService
     {
         try {
             $id = $request->get('id');
-            $delete = $this->typeQuestionRepository->delete($id);
+            $delete = $this->questionRepository->delete($id);
             if ($delete) {
                 return [
                     'status' => 'success',
-                    'message' => 'Đã cho thể loại câu hỏi đó vào thùng rác'
+                    'message' => 'Đã cho câu hỏi đó vào thùng rác'
                 ];
             } else {
                 return [
                     'status' => 'error',
-                    'message' => 'Không thể xóa thể loại câu hỏi vào cơ sở dữ liệu'
+                    'message' => 'Không thể xóa câu hỏi vào cơ sở dữ liệu'
                 ];
             }
         } catch (QueryException $e) {
@@ -181,15 +198,15 @@ class TypeQuestionService
         }
     }
 
-    // Xem thể loại câu hỏi đã cho vào thùng rác
+    // Xem câu hỏi đã cho vào thùng rác
     public function trash()
     {
         try {
-            // $data = TypeQuestion::onlyTrashed()->get();
-            $data = $this->typeQuestionRepository->allOnlyTrashed();
+            // $data = Question::onlyTrashed()->get();
+            $data = $this->questionRepository->allOnlyTrashed();
             return [
                 'status' => 'success',
-                'message' => 'Lấy thể loại câu hỏi thành công',
+                'message' => 'Lấy câu hỏi thành công',
                 'data' => $data
             ];
         } catch (QueryException $e) {
@@ -209,7 +226,7 @@ class TypeQuestionService
     {
         try {
             $id = $request->get('id');
-            $restore = $this->typeQuestionRepository->restoreTrashed($id);
+            $restore = $this->questionRepository->restoreTrashed($id);
             if($restore) {
                 return [
                     'status' => 'success',

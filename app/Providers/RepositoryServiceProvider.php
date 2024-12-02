@@ -23,6 +23,11 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Repositories\TypeQuestionRepositoryInterface',
             'App\RepositoryEloquent\TypeQuestionRepository',
         );
+        //cau hoi
+        $this->app->singleton(
+            'App\Repositories\QuestionRepositoryInterface',
+            'App\RepositoryEloquent\QuestionRepository',
+        );
     }
 
     /**

@@ -36,4 +36,12 @@
         })
         
     })
+    //chon the loai cau hoi
+    $('.choose-answer').on('change', function(){
+        let number = $(this).val();
+        let html = frameAnswer(number);
+        $('.list-answer').html(html);
+        if(number != 0) $('.list-answer').parent().find('textarea').removeAttr('disabled').removeClass('pe-none')
+        else $('.list-answer').parent().find('textarea').addClass('pe-none').attr('disabled','disabled')
+    })
 </script>

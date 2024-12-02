@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex align-items-start">
-                        <h5 class="card-title fw-semibold mb-4 mt-1">Thêm thể loại câu hỏi</h5>
+                        <h5 class="card-title fw-semibold mb-4 mt-1">Sửa thể loại câu hỏi</h5>
                         <div class="mx-3">
                             <a href="{{route('type.list')}}" class="icon-hover">
                                 <i class="ti ti-clipboard-data fs-30 cursor-pointer text-success" title="Danh sách"></i>
@@ -14,13 +14,13 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{route('type.insert')}}" method="POST">
+                            <form action="{{route('type.update',['id' => $one->id])}}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-7">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Tên thể loại <span class="text-danger">(*)</span></label>
-                                            <input type="text" class="form-control" id="name" name="name" required
+                                            <input type="text" class="form-control" value="{{$one->name}}" id="name" name="name" required
                                                 aria-describedby="emailHelp">
                                         </div>
                                     </div>
@@ -30,7 +30,7 @@
                                             <select class="form-select" name="number" aria-label="Default select example" required id="number">
                                                 <option>-----Vui lòng chọn số lượng-----</option>
                                                 @foreach ($numbers as $key => $number)
-                                                <option value="{{$key}}">{{$number}}</option>
+                                                <option value="{{$key}}" {{$key == $one->number ? 'selected' : ''}}>{{$number}}</option>
                                                 @endforeach
                                               </select>
                                         </div>

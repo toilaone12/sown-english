@@ -33,6 +33,24 @@ class TypeQuestionController extends Controller
         if(isset($response['message']['name'][0])) $response['message'] = $response['message']['name'][0];
         return redirect()->route('type.create')->with($response['status'],$response['message']);
     }
+    //form sua
+    public function edit(Request $request) {
+        $response = $this->typeQuestionService->getOne($request);
+        if($response['status'] == 'success') {
+            $numbers = ['1' => 'Một', '2' => 'Hai', '3' => 'Ba', '4' => 'Bốn'];
+            $one = $response['data'];
+            return view('type.edit', compact('numbers','one'));
+        } else {
+            return redirect()->route('type.list')->with('error',$response['message']);
+        }
+    }
+    //sua 
+    public function update(Request $request) {
+        $response = $this->typeQuestionService->update($request);
+        if(isset($response['message']['number'][0])) $response['message'] = $response['message']['number'][0];
+        if(isset($response['message']['name'][0])) $response['message'] = $response['message']['name'][0];
+        return redirect()->route('type.edit',['id' => $request->get('id')])->with($response['status'],$response['message']);
+    }
     //cho vao thung rac
     public function delete(Request $request) {
         $result = $this->typeQuestionService->delete($request);
@@ -54,7 +72,6 @@ class TypeQuestionController extends Controller
     public function restore(Request $request) {
 
         $response = $this->typeQuestionService->restore($request);
-        // dd($response);
         return redirect()->route('type.trash')->with($response['status'],$response['message']);
     }
 }

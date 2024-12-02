@@ -60,3 +60,23 @@ function swalNoti(title, text, icon, textConfirm, callback) {
         }
     });
 }
+
+function frameAnswer(number) {
+    let html = ``;
+    for (let i = 0; i < number; i++) {
+        let arr = ['']
+        if(number == 2) arr = ['A','B'];
+        if(number == 3) arr = ['A','B','C'];
+        if(number == 4) arr = ['A','B','C','D'];
+        html += `<div class="col-${number == 1 ? '12' : (number == 2 ? '6' : (number == 3 ? '4' : '3'))}">
+            <div class="mb-4">
+                <div class="mb-3">
+                    <label for="answer${number == 1 ? '' : '-'+arr[i]}" class="form-label">Câu trả lời ${arr[i]} <span class="text-danger">(*)</span></label>
+                    <input type="text" class="form-control" id="answer${number == 1 ? '' : '-'+arr[i]}" name="answer[]" required
+                        aria-describedby="emailHelp">
+                </div>
+            </div>
+        </div>`
+    }
+    return html;
+}
