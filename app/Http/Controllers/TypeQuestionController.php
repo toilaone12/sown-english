@@ -23,7 +23,7 @@ class TypeQuestionController extends Controller
     }
     //form them
     public function create() {
-        $numbers = ['1' => 'Một', '2' => 'Hai', '3' => 'Ba', '4' => 'Bốn'];
+        $numbers = ['0' => 'Không', '1' => 'Một', '2' => 'Hai', '3' => 'Ba', '4' => 'Bốn'];
         return view('type.create', compact('numbers'));
     }
     //them
@@ -37,7 +37,7 @@ class TypeQuestionController extends Controller
     public function edit(Request $request) {
         $response = $this->typeQuestionService->getOne($request);
         if($response['status'] == 'success') {
-            $numbers = ['1' => 'Một', '2' => 'Hai', '3' => 'Ba', '4' => 'Bốn'];
+            $numbers = ['0' => 'Không', '1' => 'Một', '2' => 'Hai', '3' => 'Ba', '4' => 'Bốn'];
             $one = $response['data'];
             return view('type.edit', compact('numbers','one'));
         } else {

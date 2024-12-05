@@ -90,3 +90,8 @@
     color: #4b6cd9;
 }
 
+.img-question {
+    width: 350px;
+    height: 275px;
+    object-fit: contain;
+}

@@ -35,10 +35,10 @@
                                         <td width="200">{{$one->name}}</td>
                                         <td width="300">Có: <span class="text-danger fw-bolder">{{$one->number}}</span> kết quả trả lời</td>
                                         <td width="100">
-                                            <a href="{{route('type.restore',['id' => $one->id])}}" class="border border-light rounded d-block mb-2">
+                                            <a href="{{route('type.restore',['id' => $one->id])}}" class="d-block mb-2">
                                                 <i class="ti ti-refresh fs-30 cursor-pointer text-success" title="Khôi phục"></i>
                                             </a>
-                                            <a href="" class="border border-light rounded d-block">
+                                            <a href="" class="d-block">
                                                 <i class="ti ti-backspace fs-30 cursor-pointer text-danger" title="Xóa hoàn toàn"></i>
                                             </a>
                                         </td>

@@ -24,13 +24,22 @@ class QuestionController extends Controller
             return view('question.list', compact('lists'));
         } else return view('question.list', ['error' => $response['message']]);
     }
+    //xem chi tiet thong tin cau hoi
+    public function detail(Request $request) {
+        $response = $this->questionService->getOne($request);
+        if ($response['status'] == "success") {
+            $one = $response['data'];
+            $answers = json_decode($one->answer,true);
+            return view('modal.detail_question', compact('one','answers'));
+        } else return view('question.list', ['error' => $response['message']]);
+    }
     //form them
     public function create() {
         $response = $this->typeQuestionService->list();
         $types = [];
         if($response['status'] == 'success') {
             foreach($response['data'] as $one) {
-                $types[] = ['number' => $one['number'], 'name' => $one['number'] == 1 ? 'Một' : ($one['number'] == 2 ? 'Hai' : ($one['number'] == 3 ? 'Ba' : 'Bốn'))];
+                $types[] = ['number' => $one['number'], 'name' => $one['number'] == 0 ? 'Không' : ($one['number'] == 1 ? 'Một' : ($one['number'] == 2 ? 'Hai' : ($one['number'] == 3 ? 'Ba' : 'Bốn')))];
             }
             return view('question.create', compact('types'));
         } else return view('question.list', ['error' => $response['message']]);
@@ -45,24 +54,20 @@ class QuestionController extends Controller
             if ($noti != '') $noti .= ' và ';
             $noti .= $response['message']['type_id'][0]; 
         } 
-        if(isset($response['message']['answer'][0])) {
-            if ($noti != '') $noti .= ' và ';
-            $noti .= $response['message']['answer'][0];
-        } 
-        if(isset($response['message']['correct'][0])) {
-            if ($noti != '') $noti .= ' và ';
-            $noti .= $response['message']['correct'][0];
-        } 
         if($noti != '') $response['message'] = $noti;
         return redirect()->route('question.create')->with($response['status'],$response['message']);
     }
     //form sua
     public function edit(Request $request) {
         $response = $this->questionService->getOne($request);
+        $responseType = $this->typeQuestionService->list();
+        $types = [];
         if($response['status'] == 'success') {
-            $numbers = ['1' => 'Một', '2' => 'Hai', '3' => 'Ba', '4' => 'Bốn'];
+            foreach($responseType['data'] as $one) {
+                $types[] = ['number' => $one['number'], 'name' => $one['number'] == 0 ? 'Không' : ($one['number'] == 1 ? 'Một' : ($one['number'] == 2 ? 'Hai' : ($one['number'] == 3 ? 'Ba' : 'Bốn')))];
+            }
             $one = $response['data'];
-            return view('question.edit', compact('numbers','one'));
+            return view('question.edit', compact('types','one'));
         } else {
             return redirect()->route('question.list')->with('error',$response['message']);
         }
@@ -93,7 +98,6 @@ class QuestionController extends Controller
     }
     //khoi phuc
     public function restore(Request $request) {
-
         $response = $this->questionService->restore($request);
         return redirect()->route('question.trash')->with($response['status'],$response['message']);
     }

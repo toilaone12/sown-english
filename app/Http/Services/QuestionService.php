@@ -45,27 +45,27 @@ class QuestionService
             $all = $request->all();
             $request->validate([
                 'name' => 'required',
-                'type_id' => 'required|numeric|not_in:0',
-                'answer' => 'required',
-                'correct' => 'required',
+                'type_id' => 'required|numeric',
             ], [
                 'name.required' => 'Tên câu hỏi bắt buộc phải có',
                 'type_id.required' => 'Số lượng câu hỏi bắt buộc phải có',
                 'type_id.numeric' => 'Số lượng câu hỏi bắt buộc phải có',
-                'type_id.not_in' => 'Số lượng câu hỏi bắt buộc phải có',
-                'answer.required' => 'Đáp án cho câu hỏi bắt buộc phải có',
-                'correct.required' => 'Kết quả đáp án cho câu hỏi bắt buộc phải có',
             ]);
             // dd($all);
-            $answers = $all['answer'];
             $number = $all['type_id'];
             $arrAnswer = [''];
             $letters = ['A','B','C','D'];
-            foreach ($answers as $index => $answer) {
-                if ($index < $number) $arrAnswer[$letters[$index]] = $answer;
+            $jsonAnswer = '';
+            if(isset($all['answer']) && $all['answer']) {
+                $answers = $all['answer'];
+                foreach ($answers as $index => $answer) {
+                    if ($index < $number) $arrAnswer[$index+1][$letters[$index]] = $answer;
+                }
+                $arrAnswer = array_filter($arrAnswer);
+                $jsonAnswer = json_encode($arrAnswer);
+            }else{
+                $jsonAnswer = '';
             }
-            $arrAnswer = array_filter($arrAnswer);
-            $jsonAnswer = json_encode($arrAnswer);
             $insert = $this->questionRepository->create([
                 'name' => $all['name'],
                 'type_id' => $all['type_id'],
@@ -102,6 +102,7 @@ class QuestionService
         try {
             $id = $request->get('id');
             $one = $this->questionRepository->find($id);
+            return $id;
             return [
                 'status' => 'success',
                 'message' => 'Lấy câu hỏi thành công',
@@ -167,7 +168,7 @@ class QuestionService
         }
     }
 
-    // Xóa tạm thời sản phẩm
+    // Xóa tạm thời câu hỏi
     public function delete(Request $request)
     {
         try {

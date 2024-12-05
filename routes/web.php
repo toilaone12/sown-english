@@ -33,6 +33,7 @@ Route::prefix('type')->group(function(){
 //question
 Route::prefix('question')->group(function() {
     Route::get('/list', [QuestionController::class, 'list'])->name('question.list');
+    Route::get('/detail', [QuestionController::class, 'detail'])->name('question.detail');
     Route::get('/create', [QuestionController::class, 'create'])->name('question.create');
     Route::post('/insert', [QuestionController::class, 'insert'])->name('question.insert');
     Route::get('/edit', [QuestionController::class, 'edit'])->name('question.edit');

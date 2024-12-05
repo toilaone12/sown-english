@@ -32,3 +32,43 @@ const notyf = new Notyf({
     },
     dismissible: true,
 });
+
+
+ //chon anh cau hoi
+ $('.open-file-question').on('change', function() {
+    if($('.file-question').hasClass('d-none')) $('.file-question').removeClass('d-none')
+    else $('.file-question').addClass('d-none')
+})
+//tai anh
+$('.file-question').on('change', function() {
+    let select = $(this)[0].files[0];
+    let html = ``;
+    if (select) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (select.type.startsWith('image/')) {
+                html = `<img src="${e.target.result}" alt="" class="img-question">`;
+            } else if (select.type.startsWith('video/')) {
+                html = `<video width="350" height="275" controls>
+                    <source src="${e.target.result}" type="video/mp4">
+                </video>`
+            } else if (select.type.startsWith('audio/')) {
+                html = `<audio controls>
+                    <source src="${e.target.result}" type="audio/mpeg">
+                </audio>`
+            }
+            $('.show-file-question').html(html);
+        };
+        reader.readAsDataURL(select);
+    } else {
+        notyf.error('Bạn chưa chọn file');
+    }
+})
+//chon the loai cau hoi
+$('.choose-answer').on('change', function() {
+    let number = $(this).val();
+    let html = frameAnswer(number);
+    $('.list-answer').html(html);
+    if (number != '') $('.list-answer').parent().find('textarea').removeAttr('disabled').removeClass('pe-none')
+    else $('.list-answer').parent().find('textarea').addClass('pe-none').attr('disabled', 'disabled')
+})

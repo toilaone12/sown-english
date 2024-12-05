@@ -11,37 +11,72 @@
 <script src="{{ asset('be/js/main.js') }}"></script>
 <script src="{{ asset('be/js/function.js') }}"></script>
 @if (!request()->is('/'))
-<script src="{{ asset('be/js/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('be/js/apexcharts.min.js') }}"></script>
 @endif
 <script src="{{ asset('be/js/simplebar.js') }}"></script>
 <script src="{{ asset('be/js/dashboard.js') }}"></script>
 <script>
+    let modalAllBox = $('#modal_all_box');;
+    $('.btn-open-modal').click(function() {
+        var href = $(this).attr('data-href');
+        modalAllBox.load(href, '', function() {
+            modalAllBox.modal().on("hidden.bs.modal", function() {
+                $('#modal_all_box').children().remove();
+            });
+        });
+        return false;
+    });
     @if (session('error'))
-        notyf.error({message: '{{session("error")}}'})
+        notyf.error({
+            message: '{{ session('error') }}'
+        })
     @elseif (session('success'))
-        notyf.success({message: '{{session("success")}}'})
+        notyf.success({
+            message: '{{ session('success') }}'
+        })
     @endif
     //xoa the loai cau hoi
-    $('.delete-type').on('click', function(){
+    $('.delete-type').on('click', function() {
         let id = $(this).data('id');
         let name = $(this).data('name');
-        let url = "{{route('type.delete')}}";
-        let data = {id: id};
+        let url = "{{ route('type.delete') }}";
+        let data = {
+            id: id
+        };
         swalInfo(`Vào thùng rác!`, `Bạn có muốn cho ${name} vào thùng rác không?`, () => {
             postAjax(url, data, (data) => {
-                notyf.success({message: data.message})
-            },(error) => {
+                notyf.success({
+                    message: data.message
+                })
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }, (error) => {
                 console.error(error);
             })
         })
-        
+
     })
-    //chon the loai cau hoi
-    $('.choose-answer').on('change', function(){
-        let number = $(this).val();
-        let html = frameAnswer(number);
-        $('.list-answer').html(html);
-        if(number != 0) $('.list-answer').parent().find('textarea').removeAttr('disabled').removeClass('pe-none')
-        else $('.list-answer').parent().find('textarea').addClass('pe-none').attr('disabled','disabled')
+    //xoa cau hoi
+    $('.delete-question').on('click', function() {
+        let id = $(this).data('id');
+        let name = $(this).data('name');
+        let url = "{{ route('question.delete') }}";
+        let data = {
+            id: id
+        };
+        swalInfo(`Vào thùng rác!`, `Bạn có muốn cho câu hỏi: ${name} vào thùng rác không?`, () => {
+            postAjax(url, data, (data) => {
+                notyf.success({
+                    message: data.message
+                })
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }, (error) => {
+                console.error(error);
+            })
+        })
+
     })
 </script>

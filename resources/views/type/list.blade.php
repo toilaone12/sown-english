@@ -19,7 +19,7 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <table id="listTable" class="table table-bordered" style="width:100%">
+                            <table id="listTable" class="table table-bordered table-hover" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>STT</th>
@@ -35,10 +35,10 @@
                                         <td width="200">{{$one->name}}</td>
                                         <td width="300">Có: <span class="text-danger fw-bolder">{{$one->number}}</span> kết quả trả lời</td>
                                         <td width="100">
-                                            <a href="{{route('type.edit',['id' => $one->id])}}" class="border border-light rounded d-block mb-2">
+                                            <a href="{{route('type.edit',['id' => $one->id])}}" class="d-block mb-2">
                                                 <i class="ti ti-edit fs-30 cursor-pointer text-success" title="Sửa"></i>
                                             </a>
-                                            <div class="border border-light rounded d-block delete-type" data-id="{{$one->id}}" data-name="{{$one->name}}">
+                                            <div class="d-block delete-type" data-id="{{$one->id}}" data-name="{{$one->name}}">
                                                 <i class="ti ti-trash fs-30 cursor-pointer text-danger" title="Bỏ vào thùng rác"></i>
                                             </div>
                                         </td>

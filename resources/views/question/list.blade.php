@@ -19,12 +19,11 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <table id="listTable" class="table table-bordered" style="width:100%">
+                            <table id="listTable" class="table table-stripped table-hover" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>STT</th>
                                         <th>Tên câu hỏi</th>
-                                        <th>Kiểu câu hỏi</th>
                                         <th>Chức năng</th>
                                     </tr>
                                 </thead>
@@ -32,13 +31,15 @@
                                     @foreach ($lists as $key => $one)
                                     <tr>
                                         <td>{{$key+1}}</td>
-                                        <td width="200">{{$one->name}}</td>
-                                        <td width="300">Có: <span class="text-danger fw-bolder">{{$one->number}}</span> kết quả trả lời</td>
+                                        <td width="500">{{$one->name}}</td>
                                         <td width="100">
-                                            <a href="{{route('question.edit',['id' => $one->id])}}" class="border border-light rounded d-block mb-2">
+                                            <div data-href="{{route('question.detail',['id' => $one->id])}}" data-bs-toggle="modal" data-bs-target="#modal_all_box" class="btn-open-modal d-block mb-2">
+                                                <i class="ti ti-list-details fs-30 cursor-pointer text-primary" title="Xem chi tiết"></i>
+                                            </div>
+                                            <a href="{{route('question.edit',['id' => $one->id])}}" class="d-block mb-2">
                                                 <i class="ti ti-edit fs-30 cursor-pointer text-success" title="Sửa"></i>
                                             </a>
-                                            <div class="border border-light rounded d-block delete-question" data-id="{{$one->id}}" data-name="{{$one->name}}">
+                                            <div class="d-block delete-question" data-id="{{$one->id}}" data-name="{{$one->name}}">
                                                 <i class="ti ti-trash fs-30 cursor-pointer text-danger" title="Bỏ vào thùng rác"></i>
                                             </div>
                                         </td>

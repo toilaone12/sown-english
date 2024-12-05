@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('question', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('type_id');
+            $table->text('image')->nullable();
             $table->string('name');
-            $table->text('answer');
+            $table->text('answer')->nullable();
             $table->string('correct');
             $table->timestamps();
             $table->softDeletes();
